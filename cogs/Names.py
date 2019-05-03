@@ -6,48 +6,24 @@ class Names(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    # def change_region(self, member: discord.Member, new_region):
-    #     regions = ["[EU]", "[SA]", "[AF]", "[NA]", "[NE]", "[AS]", "[OC]"]
-    #     platforms = ["[PC]", "[XBOX]", "[PS4]"]
-    #     old_platforms = []
-    #     old_region = ""
-
-    #     old = member.display_name.split()
-    #     print(f"Before: {old}")
-    #     for i, word in enumerate(old):
-    #         if word in platforms:
-    #             old_platforms.append(old.pop(i))
-    #         elif word in regions:
-    #             old_region = old.pop(i)
-    #     print(f"After: {old}")
-        
-    #     if new_region == old_region:
-    #         new = " ".join(old_platforms)
-    #         for word in old:
-    #             new += f" {word}"
-    #         return new
-        
-    #     new = " ".join(old_platforms)
-    #     new += f" {new_region}"
-    #     for word in old:
-    #         new += f" {word}"
-    #     return new
-
     def change_region(self, member: discord.Member, new_region):
         regions = ["[EU]", "[SA]", "[AF]", "[NA]", "[NE]", "[AS]", "[OC]"]
         regions.remove(new_region)
+        platforms = ["[PC]", "[XBOX]", "[PS4]"]
 
         if new_region in member.display_name:
             new = member.display_name.replace(new_region, "")
             return new
 
-        new = new_region
-
         old = member.display_name.split()
-        for word in old:
-            if word not in regions: 
-                new += f" {word}"
+        old_platforms = filter(lambda w: w in platforms, old)
 
+        new = " ".join(old_platforms)
+        new += f" {new_region}" 
+        
+        for word in old:
+            if word not in regions and word not in platforms: 
+                new += f" {word}"
         
         return new
         
